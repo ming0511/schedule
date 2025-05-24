@@ -1,8 +1,9 @@
 package com.example.schedule.repository;
 
+import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 
 public interface ScheduleRepository {
 
-    Long saveSchedule(Schedule schedule);
+    ScheduleResponseDto saveSchedule(Schedule schedule);
 }
