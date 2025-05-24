@@ -55,6 +55,11 @@ public class jbdcTemplateScheduleRepository implements ScheduleRepository{
         return result.stream().findAny();
     }
 
+    @Override
+    public int updateSchedule(Long id, String name, String password, String todo, String updatedDate) {
+        return jdbcTemplate.update("update schedule set name = ?, todo = ?, updated_date = ? where id = ? and password = ?", name, todo, updatedDate, id, password);
+    }
+
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
         return new RowMapper<ScheduleResponseDto>() {
             @Override

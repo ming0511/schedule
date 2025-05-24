@@ -4,7 +4,6 @@ import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.entity.Schedule;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public interface ScheduleRepository {
@@ -14,4 +13,6 @@ public interface ScheduleRepository {
     List<ScheduleResponseDto> findAllSchedules();
 
     Optional<Schedule> findScheduleById(Long id);
+
+    int updateSchedule(Long id, String name, String password, String todo, String updatedDate);
 }

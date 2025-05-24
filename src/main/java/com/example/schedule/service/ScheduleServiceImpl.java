@@ -6,11 +6,10 @@ import com.example.schedule.entity.Schedule;
 import com.example.schedule.repository.ScheduleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -45,5 +44,22 @@ public class ScheduleServiceImpl implements ScheduleService{
         }
 
         return new ScheduleResponseDto(optionalSchedule.get());
+    }
+
+    @Transactional
+    @Override
+    public ScheduleResponseDto updateSchedule(Long id, String name, String password, String todo, String updatedDate) {
+
+        if (name == null || todo == null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The name and todo are required values.");
+        }
+
+        int updatedRow = scheduleRepository.updateSchedule(id, name, password, todo, updatedDate);
+
+        if (updatedRow == 0){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        }
+
+        return new ScheduleResponseDto(scheduleRepository.findScheduleById(id).get());
     }
 }

@@ -2,7 +2,6 @@ package com.example.schedule.service;
 
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
-import com.example.schedule.entity.Schedule;
 
 import java.util.List;
 
@@ -13,4 +12,6 @@ public interface ScheduleService {
     List<ScheduleResponseDto> findAllSchedules();
 
     ScheduleResponseDto findScheduleById(Long id);
+
+    ScheduleResponseDto updateSchedule(Long id, String name, String password, String todo, String updatedDate);
 }
