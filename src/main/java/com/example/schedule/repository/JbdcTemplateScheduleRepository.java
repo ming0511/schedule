@@ -58,9 +58,22 @@ public class JbdcTemplateScheduleRepository implements ScheduleRepository{
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
+    public List<ScheduleResponseDto> findAllSchedules(String name, LocalDateTime updatedDate) {
+        String sql = "SELECT id, name, todo, createdDate, updatedDate " +
+                "FROM schedules " +
+                "WHERE (updatedDate >= ? OR ? IS NULL) " +
+                "AND (name = ? OR ? IS NULL) " +
+                "ORDER BY updatedDate DESC";
 
-        return jdbcTemplate.query("select * from schedules", scheduleRowMapper());
+        // 파라미터 설정
+        Object[] params = new Object[] {
+                updatedDate,
+                updatedDate == null ? null : updatedDate,
+                name,
+                name == null ? null : name
+        };
+
+        return jdbcTemplate.query(sql, scheduleRowMapper(), params);
     }
 
     @Override

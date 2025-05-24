@@ -30,9 +30,9 @@ public class ScheduleServiceImpl implements ScheduleService{
     }
 
     @Override
-    public List<ScheduleResponseDto> findAllSchedules() {
+    public List<ScheduleResponseDto> findAllSchedules(String name, LocalDateTime updatedDate) {
 
-        return scheduleRepository.findAllSchedules();
+        return scheduleRepository.findAllSchedules(name, updatedDate);
     }
 
     @Override

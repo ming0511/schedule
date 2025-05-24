@@ -3,10 +3,12 @@ package com.example.schedule.controller;
 import com.example.schedule.dto.ScheduleRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 import com.example.schedule.service.ScheduleService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,9 +30,13 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public List<ScheduleResponseDto> findAllSchedules(){
+    public List<ScheduleResponseDto> findAllSchedules(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date
+    ){
+        LocalDateTime dateTime = date != null ? date.atStartOfDay() : null;
 
-        return scheduleService.findAllSchedules();
+        return scheduleService.findAllSchedules(name, dateTime);
     }
 
     @GetMapping("/{id}")
