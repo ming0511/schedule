@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -41,13 +42,16 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
+            @PathVariable LocalDateTime updatedDate,
             @RequestBody ScheduleRequestDto scheduleRequestDto
     ){
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTodo(), scheduleRequestDto.getUpdatedDate()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTodo(),updatedDate), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id){
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable Long id
+    ){
 
         scheduleService.deleteSchedule(id);
         return new ResponseEntity<>(HttpStatus.OK);

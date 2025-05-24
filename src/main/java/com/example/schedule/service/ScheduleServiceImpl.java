@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Override
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
-        Schedule schedule = new Schedule(scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTodo(), scheduleRequestDto.getCreatedDate(), scheduleRequestDto.getUpdatedDate());
+        Schedule schedule = new Schedule(scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTodo());
 
         return scheduleRepository.saveSchedule(schedule);
     }
@@ -48,7 +49,7 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String name, String password, String todo, String updatedDate) {
+    public ScheduleResponseDto updateSchedule(Long id, String name, String password, String todo, LocalDateTime updatedDate) {
 
         if (name == null || todo == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The name and todo are required values.");

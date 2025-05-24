@@ -12,10 +12,16 @@ public class Schedule {
     private String name;
     private String password;
     private String todo;
-    private String createdDate;
-    private String updatedDate;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
-    public Schedule(Long id, String name, String todo, String createdDate, String updatedDate) {
+    public Schedule(String name, String password, String todo) {
+        this.name = name;
+        this.password = name;
+        this.todo = todo;
+    }
+
+    public Schedule(Long id, String name, String todo, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.id = id;
         this.name = name;
         this.todo = todo;
@@ -23,7 +29,7 @@ public class Schedule {
         this.updatedDate = updatedDate;
     }
 
-    public Schedule(String name, String password, String todo, String createdDate, String updatedDate) {
+    public Schedule(String name, String password, String todo, LocalDateTime createdDate, LocalDateTime updatedDate) {
         this.name = name;
         this.password = password;
         this.todo = todo;
@@ -31,7 +37,7 @@ public class Schedule {
         this.updatedDate = updatedDate;
     }
 
-    public void update(String name, String todo, String updatedDate){
+    public void update(String name, String todo, LocalDateTime updatedDate){
         this.name = name;
         this.todo = todo;
         this.updatedDate = updatedDate;

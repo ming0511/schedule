@@ -11,58 +11,73 @@ import org.springframework.stereotype.Repository;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class jbdcTemplateScheduleRepository implements ScheduleRepository{
+public class JbdcTemplateScheduleRepository implements ScheduleRepository{
 
     private final JdbcTemplate jdbcTemplate;
 
-    public jbdcTemplateScheduleRepository(DataSource dataSource) {
+    public JbdcTemplateScheduleRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
     public ScheduleResponseDto saveSchedule(Schedule schedule) {
         SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        jdbcInsert.withTableName("schedule").usingGeneratedKeyColumns("id");
+        jdbcInsert.withTableName("schedules")
+                .usingGeneratedKeyColumns("id")
+                .usingColumns("name", "password", "todo");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("name", schedule.getName());
         parameters.put("password", schedule.getPassword());
         parameters.put("todo", schedule.getTodo());
-        parameters.put("created_date", schedule.getCreatedDate());
-        parameters.put("updated_date", schedule.getUpdatedDate());
 
         Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
 
-        return new ScheduleResponseDto(key.longValue(), schedule.getName(), schedule.getTodo(), schedule.getCreatedDate(), schedule.getUpdatedDate());
+        Long id = key.longValue();
+
+        // id로 생성된 일정의 created_date와 updated_date를 조회
+        Map<String, Object> result = jdbcTemplate.queryForMap("SELECT id, name, todo, createdDate, updatedDate FROM schedules WHERE id = ?", id);
+
+        // 반환하는 DTO에 날짜 정보 포함
+        LocalDateTime createdDate = result.get("createdDate") != null ?
+                ((java.sql.Timestamp) result.get("createdDate")).toLocalDateTime() : null;
+        LocalDateTime updatedDate = result.get("updatedDate") != null ?
+                ((java.sql.Timestamp) result.get("updatedDate")).toLocalDateTime() : null;
+
+        // 디버깅
+        System.out.println("updatedDate = " + updatedDate);
+
+        return new ScheduleResponseDto(id, schedule.getName(), schedule.getTodo(), createdDate, updatedDate);
     }
 
     @Override
     public List<ScheduleResponseDto> findAllSchedules() {
 
-        return jdbcTemplate.query("select * from schedule", scheduleRowMapper());
+        return jdbcTemplate.query("select * from schedules", scheduleRowMapper());
     }
 
     @Override
     public Optional<Schedule> findScheduleById(Long id){
-        List<Schedule> result = jdbcTemplate.query("select * from schedule where id = ?", scheduleRowMapperV2(), id);
+        List<Schedule> result = jdbcTemplate.query("select * from schedules where id = ?", scheduleRowMapperV2(), id);
 
         return result.stream().findAny();
     }
 
     @Override
-    public int updateSchedule(Long id, String name, String password, String todo, String updatedDate) {
-        return jdbcTemplate.update("update schedule set name = ?, todo = ?, updated_date = ? where id = ? and password = ?", name, todo, updatedDate, id, password);
+    public int updateSchedule(Long id, String name, String password, String todo, LocalDateTime updatedDate) {
+        return jdbcTemplate.update("update schedules set name = ?, todo = ?, updated_date = ? where id = ? and password = ?", name, todo, updatedDate, id, password);
     }
 
     @Override
     public int deleteSchedule(Long id) {
-        return jdbcTemplate.update("delete from schedule where id = ?", id);
+        return jdbcTemplate.update("delete from schedules where id = ?", id);
     }
 
     private RowMapper<ScheduleResponseDto> scheduleRowMapper() {
@@ -73,8 +88,8 @@ public class jbdcTemplateScheduleRepository implements ScheduleRepository{
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getString("todo"),
-                        rs.getString("created_date"),
-                        rs.getString("updated_date")
+                        rs.getObject("createdDate", LocalDateTime.class),
+                        rs.getObject("updatedDate", LocalDateTime.class)
                 );
             }
         };
@@ -88,8 +103,8 @@ public class jbdcTemplateScheduleRepository implements ScheduleRepository{
                         rs.getLong("id"),
                         rs.getString("name"),
                         rs.getString("todo"),
-                        rs.getString("created_date"),
-                        rs.getString("updated_date")
+                        rs.getObject("createdDate", LocalDateTime.class),
+                        rs.getObject("updatedDate", LocalDateTime.class)
                 );
             }
         };
