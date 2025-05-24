@@ -84,9 +84,16 @@ public class JbdcTemplateScheduleRepository implements ScheduleRepository{
     }
 
     @Override
-    public int updateSchedule(Long id, String name, String password, String todo, LocalDateTime updatedDate) {
-        return jdbcTemplate.update("update schedules set name = ?, todo = ?, updated_date = ? where id = ? and password = ?", name, todo, updatedDate, id, password);
+    public Optional<Schedule> findScheduleWithPasswordById(Long id) {
+        List<Schedule> result = jdbcTemplate.query("select * from schedules where id = ?", scheduleRowMapperV3(), id);
+
+        return result.stream().findAny();
     }
+
+//    @Override
+//    public int updateSchedule(Long id, String name, String password, String todo) {
+//        return jdbcTemplate.update("update schedules set name = ?, todo = ? where id = ? and password = ?", name, todo, id, password);
+//    }
 
     @Override
     public int deleteSchedule(Long id) {
@@ -115,6 +122,22 @@ public class JbdcTemplateScheduleRepository implements ScheduleRepository{
                 return new Schedule(
                         rs.getLong("id"),
                         rs.getString("name"),
+                        rs.getString("todo"),
+                        rs.getObject("createdDate", LocalDateTime.class),
+                        rs.getObject("updatedDate", LocalDateTime.class)
+                );
+            }
+        };
+    }
+
+    private RowMapper<Schedule> scheduleRowMapperV3() {
+        return new RowMapper<Schedule>() {
+            @Override
+            public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Schedule(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getString("password"),
                         rs.getString("todo"),
                         rs.getObject("createdDate", LocalDateTime.class),
                         rs.getObject("updatedDate", LocalDateTime.class)

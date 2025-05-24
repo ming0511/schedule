@@ -49,19 +49,26 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     @Transactional
     @Override
-    public ScheduleResponseDto updateSchedule(Long id, String name, String password, String todo, LocalDateTime updatedDate) {
+    public ScheduleResponseDto updateSchedule(Long id, String name, String password, String todo) {
+        // 기존 일정 조회
+        Schedule schedule = scheduleRepository.findScheduleWithPasswordById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다."));
 
-        if (name == null || todo == null){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The name and todo are required values.");
+        // 비밀번호 확인
+        if (schedule.getPassword() == null || password == null || !schedule.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
-        int updatedRow = scheduleRepository.updateSchedule(id, name, password, todo, updatedDate);
-
-        if (updatedRow == 0){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        // 수정할 내용이 있는 경우에만 수정
+        if (name != null && !name.trim().isEmpty()) {
+            schedule.setName(name);
         }
 
-        return new ScheduleResponseDto(scheduleRepository.findScheduleById(id).get());
+        if (todo != null && !todo.trim().isEmpty()) {
+            schedule.setTodo(todo);
+        }
+
+        return new ScheduleResponseDto(schedule);
     }
 
     @Override

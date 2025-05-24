@@ -17,7 +17,7 @@ public class Schedule {
 
     public Schedule(String name, String password, String todo) {
         this.name = name;
-        this.password = name;
+        this.password = password;
         this.todo = todo;
     }
 
@@ -42,4 +42,14 @@ public class Schedule {
         this.todo = todo;
         this.updatedDate = updatedDate;
     }
+
+    // setter 메서드들
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTodo(String todo) {
+        this.todo = todo;
+    }
+
 }
