@@ -59,16 +59,13 @@ public class ScheduleServiceImpl implements ScheduleService{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
-        // 수정할 내용이 있는 경우에만 수정
-        if (name != null && !name.trim().isEmpty()) {
-            schedule.setName(name);
+        int updatedRow = scheduleRepository.updateSchedule(id, name, todo);
+
+        if (updatedRow == 0){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
         }
 
-        if (todo != null && !todo.trim().isEmpty()) {
-            schedule.setTodo(todo);
-        }
-
-        return new ScheduleResponseDto(schedule);
+        return new ScheduleResponseDto(scheduleRepository.findScheduleById(id).get());
     }
 
     @Override

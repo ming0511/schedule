@@ -17,7 +17,7 @@ public interface ScheduleRepository {
 
     Optional<Schedule> findScheduleWithPasswordById(Long id);
 
-//    int updateSchedule(Long id, String name, String password, String todo);
+    int updateSchedule(Long id, String name, String todo);
 
     int deleteSchedule(Long id);
 }

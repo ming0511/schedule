@@ -90,10 +90,10 @@ public class JbdcTemplateScheduleRepository implements ScheduleRepository{
         return result.stream().findAny();
     }
 
-//    @Override
-//    public int updateSchedule(Long id, String name, String password, String todo) {
-//        return jdbcTemplate.update("update schedules set name = ?, todo = ? where id = ? and password = ?", name, todo, id, password);
-//    }
+    @Override
+    public int updateSchedule(Long id, String name, String todo) {
+        return jdbcTemplate.update("update schedules set name = ?, todo = ? where id = ?", name, todo, id);
+    }
 
     @Override
     public int deleteSchedule(Long id) {
