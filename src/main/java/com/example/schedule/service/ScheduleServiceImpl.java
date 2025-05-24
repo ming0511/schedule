@@ -59,20 +59,22 @@ public class ScheduleServiceImpl implements ScheduleService{
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
-        int updatedRow = scheduleRepository.updateSchedule(id, name, todo);
-
-        if (updatedRow == 0){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
-        }
+        scheduleRepository.updateSchedule(id, name, todo);
 
         return new ScheduleResponseDto(scheduleRepository.findScheduleById(id).get());
     }
 
     @Override
-    public void deleteSchedule(Long id) {
-        int deletedRow = scheduleRepository.deleteSchedule(id);
-        if (deletedRow == 0){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+    public void deleteSchedule(Long id, String password) {
+        // 기존 일정 조회
+        Schedule schedule = scheduleRepository.findScheduleWithPasswordById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다."));
+
+        // 비밀번호 확인
+        if (schedule.getPassword() == null || password == null || !schedule.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
+
+        scheduleRepository.deleteSchedule(id);
     }
 }

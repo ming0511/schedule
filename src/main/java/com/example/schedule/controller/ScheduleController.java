@@ -55,10 +55,11 @@ public class ScheduleController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSchedule(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @RequestBody ScheduleRequestDto scheduleRequestDto
     ){
 
-        scheduleService.deleteSchedule(id);
+        scheduleService.deleteSchedule(id, scheduleRequestDto.getPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
