@@ -51,9 +51,6 @@ public class JbdcTemplateScheduleRepository implements ScheduleRepository{
         LocalDateTime updatedDate = result.get("updatedDate") != null ?
                 ((java.sql.Timestamp) result.get("updatedDate")).toLocalDateTime() : null;
 
-        // 디버깅
-        System.out.println("updatedDate = " + updatedDate);
-
         return new ScheduleResponseDto(id, schedule.getName(), schedule.getTodo(), createdDate, updatedDate);
     }
 
