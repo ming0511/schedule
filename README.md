@@ -1,9 +1,9 @@
 # 📌 Schedule API 명세서
 
+
 ## 🔗 Base URL
 /api/schedules
 
----
 
 ## ✅ 1. 일정 생성
 - **Method**: `POST`
@@ -34,7 +34,7 @@
   - `200 OK`: 정상 생성
   - `400 Bad Request`: 요청 데이터 누락
 
----
+
 ## ✅ 2. 전체 일정 조회
 - **Method**: `GET`
 - **URL**: `/api/schedules`
@@ -67,7 +67,7 @@
 - **상태코드**:
   - `200 OK`: 정상 조회
 
----
+
 ## ✅ 3. 선택 일정 조회
 - **Method**: `GET`
 - **URL**: `/api/schedules/{id}`
@@ -91,7 +91,7 @@
   - `200 OK`: 정상 조회
   - `404 Not Found`: 해당 id에 대한 일정이 존재하지 않음
 
----
+
 ## ✅ 4. 선택 일정 수정
 - **Method**: `PATCH`
 - **URL**: `/api/schedules/{id}`
@@ -126,7 +126,7 @@
   - `400 Bad Request`: 요청 데이터 누락 또는 비밀번호 불일치
   - `404 Not Found`: 해당 id에 대한 일정이 존재하지 않음
 
----
+
 ## ✅ 5. 선택 일정 삭제
 - **Method**: `DELETE`
 - **URL**: `/api/schedules/{id}`
@@ -151,7 +151,7 @@
 ## 📝 비고
 모든 날짜 형식은 ISO 8601 (YYYY-MM-DDTHH:mm:ss) 기준입니다.
 
----
+
 ## 🗂️ Schedule 테이블 구조 (ERD)
 
 | 필드명        | 타입         | 제약조건                      | 설명         |
