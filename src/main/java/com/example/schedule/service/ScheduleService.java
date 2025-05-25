@@ -1,6 +1,6 @@
 package com.example.schedule.service;
 
-import com.example.schedule.dto.ScheduleRequestDto;
+import com.example.schedule.dto.CreateRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
 
 import java.time.LocalDateTime;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ScheduleService {
 
-    ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto);
+    ScheduleResponseDto saveSchedule(CreateRequestDto createRequestDto);
 
     List<ScheduleResponseDto> findAllSchedules(String name, LocalDateTime updatedDate);
 

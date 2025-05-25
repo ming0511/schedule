@@ -1,8 +1,11 @@
 package com.example.schedule.controller;
 
-import com.example.schedule.dto.ScheduleRequestDto;
+import com.example.schedule.dto.CreateRequestDto;
+import com.example.schedule.dto.DeleteRequestDto;
 import com.example.schedule.dto.ScheduleResponseDto;
+import com.example.schedule.dto.UpdateRequestDto;
 import com.example.schedule.service.ScheduleService;
+import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +27,9 @@ public class ScheduleController {
     }
 
     @PostMapping
-    public ResponseEntity<ScheduleResponseDto> createSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    public ResponseEntity<ScheduleResponseDto> createSchedule(@Valid @RequestBody CreateRequestDto createRequestDto) {
 
-        return new ResponseEntity<>(scheduleService.saveSchedule(scheduleRequestDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(scheduleService.saveSchedule(createRequestDto), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -48,18 +51,18 @@ public class ScheduleController {
     @PatchMapping("/{id}")
     public ResponseEntity<ScheduleResponseDto> updateSchedule(
             @PathVariable Long id,
-            @RequestBody ScheduleRequestDto scheduleRequestDto
+            @Valid @RequestBody UpdateRequestDto updateRequestDto
     ){
-        return new ResponseEntity<>(scheduleService.updateSchedule(id, scheduleRequestDto.getName(), scheduleRequestDto.getPassword(), scheduleRequestDto.getTodo()), HttpStatus.OK);
+        return new ResponseEntity<>(scheduleService.updateSchedule(id, updateRequestDto.getName(), updateRequestDto.getPassword(), updateRequestDto.getTodo()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSchedule(
             @PathVariable Long id,
-            @RequestBody ScheduleRequestDto scheduleRequestDto
+            @Valid @RequestBody DeleteRequestDto deleteRequestDto
     ){
 
-        scheduleService.deleteSchedule(id, scheduleRequestDto.getPassword());
+        scheduleService.deleteSchedule(id, deleteRequestDto.getPassword());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
