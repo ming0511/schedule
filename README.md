@@ -150,3 +150,17 @@
 
 ## 📝 비고
 모든 날짜 형식은 ISO 8601 (YYYY-MM-DDTHH:mm:ss) 기준입니다.
+
+---
+## 🗂️ Schedule 테이블 구조 (ERD)
+
+| 필드명        | 타입         | 제약조건                      | 설명         |
+|---------------|--------------|-------------------------------|--------------|
+| id            | INT          | PK, AUTO_INCREMENT            | 일정 ID      |
+| name          | VARCHAR(255) | NOT NULL                      | 작성자명      |
+| password      | VARCHAR(255) | NOT NULL                      | 비밀번호      |
+| todo          | VARCHAR(255) | NOT NULL                      | 할 일         |
+| createdDate   | TIMESTAMP    | DEFAULT CURRENT_TIMESTAMP     | 작성일        |
+| updatedDate   | TIMESTAMP    | DEFAULT CURRENT_TIMESTAMP<br>ON UPDATE CURRENT_TIMESTAMP | 수정일(자동 갱신) |
+
+---
