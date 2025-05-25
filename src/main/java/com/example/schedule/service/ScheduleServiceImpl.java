@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService{
@@ -54,7 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다."));
 
         // 비밀번호 확인
-        if (schedule.getPassword() == null || password == null || !schedule.getPassword().equals(password)) {
+        if (!Objects.equals(schedule.getPassword(), password)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
@@ -86,7 +86,7 @@ public class ScheduleServiceImpl implements ScheduleService{
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정이 존재하지 않습니다."));
 
         // 비밀번호 확인
-        if (schedule.getPassword() == null || password == null || !schedule.getPassword().equals(password)) {
+        if (!Objects.equals(schedule.getPassword(), password)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.");
         }
 
