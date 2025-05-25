@@ -73,7 +73,7 @@
 - **URL**: `/api/schedules/{id}`
 - **설명**: 특정 id의 일정을 조회합니다.
 
-- **Query Parameters**:
+- **Path Parameters**:
     - id: 조회할 일정의 ID
 
 - **Response Body**:
@@ -97,7 +97,7 @@
 - **URL**: `/api/schedules/{id}`
 - **설명**: id에 해당하는 일정을 수정합니다. name과 todo만 수정 가능하며, password는 검증용으로 반드시 필요합니다.
 
-- **Query Parameters**:
+- **Path Parameters**:
   - id: 수정할 일정의 ID
 
 - **Request Body**:
@@ -132,7 +132,7 @@
 - **URL**: `/api/schedules/{id}`
 - **설명**: id에 해당하는 일정을 삭제합니다. password는 필수로 전달되어야 합니다.
 
-- **Query Parameters**:
+- **Path Parameters**:
     - id: 삭제할 일정의 ID
 
 - **Request Body**:
